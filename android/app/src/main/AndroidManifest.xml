@@ -1,8 +1,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Lets the "Download report" button save the scorecard PNG into the
+         device's Gallery/Pictures on Android 9 and below (Android 10+ uses
+         scoped storage and needs no permission for this). No INTERNET
+         permission is requested anywhere in this app — it makes no network
+         calls at all. -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="29" />
+
     <application
-        android:label="Friendship Polygraph"
+        android:label="friendshipmania"
         android:name="${applicationName}"
-        android:icon="@mipmap/ic_launcher">
+        android:icon="@mipmap/ic_launcher"
+        android:requestLegacyExternalStorage="true"
+        android:allowBackup="false"
+        android:usesCleartextTraffic="false"
+        android:fullBackupContent="false">
         <activity
             android:name=".MainActivity"
             android:exported="true"

@@ -1,4 +1,4 @@
-package com.homilabs.friendship_polygraph
+package com.homilabs.friendshipmania
 
 import io.flutter.embedding.android.FlutterActivity
 

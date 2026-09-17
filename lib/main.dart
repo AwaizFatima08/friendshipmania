@@ -4,16 +4,16 @@ import 'screens/welcome_screen.dart';
 import 'theme.dart';
 
 void main() {
-  runApp(const FriendshipPolygraphApp());
+  runApp(const FriendshipManiaApp());
 }
 
-class FriendshipPolygraphApp extends StatelessWidget {
-  const FriendshipPolygraphApp({super.key});
+class FriendshipManiaApp extends StatelessWidget {
+  const FriendshipManiaApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'The Friendship Polygraph',
+      title: 'friendshipmania',
       debugShowCheckedModeBanner: false,
       theme: buildAppTheme(),
       home: const WelcomeScreen(),

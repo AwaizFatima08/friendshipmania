@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 500">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#7C5CF0" />
+      <stop offset="1" stop-color="#5636C4" />
+    </linearGradient>
+  </defs>
+  <rect width="1024" height="500" fill="url(#bg)" />
+
+  <circle cx="180" cy="250" r="120" fill="#FFFFFF" fill-opacity="0.14" />
+  <circle cx="180" cy="250" r="92" fill="#FFFFFF" />
+  <g transform="translate(180,250) scale(0.22) translate(-512,-512)">
+    <path d="M 204 512 L 320 512 L 362 440 L 404 584 L 460 336 L 516 620 L 572 512 L 820 512"
+          fill="none" stroke="#5636C4" stroke-width="46"
+          stroke-linecap="round" stroke-linejoin="round" />
+    <circle cx="230" cy="512" r="32" fill="#5636C4" />
+    <circle cx="794" cy="512" r="32" fill="#5636C4" />
+  </g>
+
+  <text x="342" y="250" font-family="DejaVu Sans" font-weight="bold"
+        font-size="72" textLength="650" lengthAdjust="spacingAndGlyphs"
+        fill="#FFFFFF">friendshipmania</text>
+  <text x="344" y="300" font-family="DejaVu Sans" font-weight="bold"
+        font-size="30" fill="#FFFFFF" fill-opacity="0.88">Nobody lies to a polygraph.</text>
+</svg>

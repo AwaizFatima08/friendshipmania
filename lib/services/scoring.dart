@@ -95,3 +95,48 @@ ScoreBand bandForPercent(int percent) {
     orElse: () => soloScoreBands.last,
   );
 }
+
+/// One line of the report's category breakdown: how this run scored on
+/// a single question tag (e.g. "loyalty", "chaos"), plus a friendly label
+/// for that tag so the UI never has to show raw ids.
+class TagScore {
+  final String tag;
+  final String label;
+  final int percent;
+
+  const TagScore({required this.tag, required this.label, required this.percent});
+}
+
+const Map<String, String> _tagLabels = {
+  'roast': '🔥 Roast Resilience',
+  'loyalty': '🛡️ Loyalty',
+  'chaos': '🎢 Chaos Compatibility',
+  'receipts': '🧾 Brutal Honesty',
+  'nostalgia': '📼 History Together',
+};
+
+/// Breaks a quiz run down by question tag, so the report can show more than
+/// one number — only tags that actually appeared in this run are included,
+/// since a 10-question sample from a 5-tag bank won't always hit all five.
+List<TagScore> tagBreakdown(List<Question> questions, List<int> chosenScores) {
+  assert(questions.length == chosenScores.length);
+
+  final earnedByTag = <String, int>{};
+  final possibleByTag = <String, int>{};
+
+  for (var i = 0; i < questions.length; i++) {
+    final tag = questions[i].tag;
+    earnedByTag[tag] = (earnedByTag[tag] ?? 0) + chosenScores[i];
+    possibleByTag[tag] = (possibleByTag[tag] ?? 0) + questions[i].maxScore;
+  }
+
+  final result = <TagScore>[];
+  for (final tag in earnedByTag.keys) {
+    final possible = possibleByTag[tag] ?? 0;
+    final percent = possible == 0 ? 0 : ((earnedByTag[tag]! / possible) * 100).round();
+    result.add(TagScore(tag: tag, label: _tagLabels[tag] ?? tag, percent: percent));
+  }
+
+  result.sort((a, b) => b.percent.compareTo(a.percent));
+  return result;
+}

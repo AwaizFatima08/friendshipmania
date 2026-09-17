@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/gradient_page.dart';
 import 'question_screen.dart';
 
 class NamesScreen extends StatefulWidget {
@@ -13,6 +14,7 @@ class _NamesScreenState extends State<NamesScreen> {
   final _formKey = GlobalKey<FormState>();
   final _yourNameController = TextEditingController();
   final _friendNameController = TextEditingController();
+  bool _submitting = false;
 
   @override
   void dispose() {
@@ -22,16 +24,24 @@ class _NamesScreenState extends State<NamesScreen> {
   }
 
   void _startQuiz() {
+    if (_submitting) return;
     if (!_formKey.currentState!.validate()) return;
+    setState(() => _submitting = true);
 
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => QuestionScreen(
-          yourName: _yourNameController.text.trim(),
-          friendName: _friendNameController.text.trim(),
-        ),
-      ),
-    );
+    Navigator.of(context)
+        .push(
+          MaterialPageRoute(
+            builder: (_) => QuestionScreen(
+              yourName: _yourNameController.text.trim(),
+              friendName: _friendNameController.text.trim(),
+            ),
+          ),
+        )
+        .then((_) {
+          // Re-enable the button once the user is back on this screen,
+          // whether that's from pressing back mid-quiz or any other route.
+          if (mounted) setState(() => _submitting = false);
+        });
   }
 
   String? _requiredValidator(String? value) {
@@ -43,42 +53,53 @@ class _NamesScreenState extends State<NamesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Who are we interrogating?')),
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  'No login, no email, no nonsense. Just two names.',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 28),
-                TextFormField(
-                  controller: _yourNameController,
-                  textCapitalization: TextCapitalization.words,
-                  decoration: const InputDecoration(labelText: 'Your name'),
-                  validator: _requiredValidator,
-                ),
-                const SizedBox(height: 16),
-                TextFormField(
-                  controller: _friendNameController,
-                  textCapitalization: TextCapitalization.words,
-                  decoration:
-                      const InputDecoration(labelText: "Your friend's name"),
-                  validator: _requiredValidator,
-                ),
-                const SizedBox(height: 32),
-                ElevatedButton(
-                  onPressed: _startQuiz,
-                  child: const Text('Start the quiz'),
-                ),
-              ],
-            ),
+    return GradientPage(
+      appBar: AppBar(title: const Text('Who are we interrogating? 🔍')),
+      body: Padding(
+        padding: const EdgeInsets.all(24),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'No login, no email, no nonsense bestie. Just two names.',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                      color: Colors.white.withValues(alpha: 0.95),
+                    ),
+              ),
+              const SizedBox(height: 28),
+              TextFormField(
+                controller: _yourNameController,
+                textCapitalization: TextCapitalization.words,
+                maxLength: 30,
+                decoration: const InputDecoration(labelText: 'Your name'),
+                validator: _requiredValidator,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
+                controller: _friendNameController,
+                textCapitalization: TextCapitalization.words,
+                maxLength: 30,
+                decoration:
+                    const InputDecoration(labelText: "Your friend's name"),
+                validator: _requiredValidator,
+              ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: _submitting ? null : _startQuiz,
+                child: _submitting
+                    ? const SizedBox(
+                        height: 20,
+                        width: 20,
+                        child: CircularProgressIndicator(
+                          strokeWidth: 2,
+                          valueColor: AlwaysStoppedAnimation(Color(0xFF2B0B4E)),
+                        ),
+                      )
+                    : const Text('Start the quiz 🚀'),
+              ),
+            ],
           ),
         ),
       ),
