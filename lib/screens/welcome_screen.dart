@@ -290,7 +290,7 @@ class _AccountButton extends StatelessWidget {
             ),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (_) => const AuthScreen(startOnSignUp: false),
+                builder: (_) => const AuthScreen(startOnSignUp: false, allowGuest: false),
               ),
             ),
             child: const Text('Sign in'),

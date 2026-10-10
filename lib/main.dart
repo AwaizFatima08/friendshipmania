@@ -18,13 +18,22 @@ import 'theme.dart';
 /// this impossible to switch on in a release build.
 const bool _useEmulator = bool.fromEnvironment('USE_FIREBASE_EMULATOR');
 
+/// 127.0.0.1 for a real phone with `adb reverse`; pass 10.0.2.2 for an
+/// Android emulator. FlutterFire would silently rewrite both "localhost" and
+/// "127.0.0.1" to 10.0.2.2 (unreachable from a real phone), so automatic
+/// host mapping is switched off below.
+const String _emulatorHost =
+    String.fromEnvironment('EMULATOR_HOST', defaultValue: '127.0.0.1');
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
   if (kDebugMode && _useEmulator) {
-    await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-    FirebaseFirestore.instance.useFirestoreEmulator('localhost', 8080);
+    await FirebaseAuth.instance
+        .useAuthEmulator(_emulatorHost, 9099, automaticHostMapping: false);
+    FirebaseFirestore.instance
+        .useFirestoreEmulator(_emulatorHost, 8180, automaticHostMapping: false);
   }
 
   final audio = AppAudioService();

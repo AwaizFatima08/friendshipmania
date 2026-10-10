@@ -41,25 +41,26 @@ friendship lie-detector quiz. Original docs (`friendship-meter-spec*.md`) are hi
   labels breaking words, and **tofu emoji** (🫶 🫡 🧊 🧾 🤨 replaced).
 - Share image now has a branded gradient frame + footer.
 
-### NOT verified / not done (be honest about these)
-1. **Real sign-up, sign-in, Google sign-in and account deletion have not been run on a device.** Creating accounts
-   in the real project is not something an assistant should do; the plan was local emulators.
-   The debug-only hook exists: `--dart-define=USE_FIREBASE_EMULATOR=true` (+ `adb reverse tcp:9099 tcp:8080`).
-   **Blocked:** firebase-tools needs **Java 21**; this machine has 17. Needs a ~190 MB JDK download (asked, awaiting OK).
-2. **Firestore rules have not been unit-tested** (same JDK blocker; they compile and are deployed).
-3. **No release build since the Firebase/auth change.** Run one (with the memory checks below) and verify R8 didn't
-   break Firebase/Google sign-in before uploading.
-4. **Graphics and audio** (homidev) not requested yet — waiting for approval of the asset list (see below).
-5. **Play Console:** nothing submitted. After first upload add the Play App Signing SHA-1/256 to Firebase.
-6. Local work is **not committed/pushed** since the Gen Z + auth work (public repo AwaizFatima08/friendshipmania).
+### Verified on 2026-10-10 (afternoon)
+- **Full account lifecycle on the real A12 against local emulators:** sign up → profile written → quiz →
+  verdict auto-saved (one doc, server timestamp, category scores only) → My verdicts lists it →
+  delete with a WRONG password is refused and nothing is deleted → correct password deletes profile,
+  verdicts and the account; app returns to signed-out.
+- **Firestore rules:** 19 tests pass in `test_rules/`; 4 deliberate weakenings were each caught.
+- Bugs found doing this: FlutterFire remapped `127.0.0.1` to 10.0.2.2 (fixed with `automaticHostMapping:false`);
+  release-grade cleartext block also blocked the emulators (fixed with a debug-only network config);
+  delete-dialog label truncated at large text (shortened).
 
-### Proposed homidev assets (awaiting owner's OK — workflow in ~/.claude/homidev.md)
-Images (`icon-cutout-basic`, no people, so no audience issue): 1 detective-bean **mascot** x3 seeds (welcome hero +
-icon), 5 verdict-band **stickers** (ice cube, skeptic, popcorn, flame heart, crown). Audio: 1 looping **music**
-(`music-loop-basic`, bpm ~100) x3 seeds; sfx `tap`, `answer`, `reveal` x3 seeds each. Needs "Powered by Stability AI"
-on About + store description. Files are expected at `assets/audio/music/loop.ogg` and
-`assets/audio/sfx/{tap,answer,reveal}.ogg`; declare them in pubspec when they exist.
-**homidev reported GPU 100% / 11 GB in use with no job running — jobs will fail "GPU busy" until that clears.**
+### Still NOT verified / not done
+1. **Real Google sign-in** (needs the owner's Google account on a device). Email sign-in against the real
+   project is also untested on purpose (no accounts were created in production).
+2. **No release (R8) build since the Firebase change** — do one before upload and smoke-test sign-in.
+3. **homidev assets** — 8 images + 9 sfx generated, all Stage 1 PASS, review sheet
+   `~/ai-inbox/friendshipmania/review-20261010-1130.html` **awaiting Homi's approve/reject**. Nothing integrated.
+4. **Music blocked:** all 3 `music-loop-basic` jobs failed Stage 1 identically — OGG true peak -0.3 to -0.5 dBFS
+   vs the -1 dBFS limit. Systematic (receiver/recipe limiter ceiling vs OGG overshoot) — Homi's to fix on homidev.
+   Rejected files are in `~/ai-inbox/_rejected/`; must not be used.
+5. Site not deployed (Hostinger login). Play: owner uploads; checklist to be prepared with the final AAB.
 
 ## Machine rules (this PC is shared with other Claude sessions/projects)
 - Before any Gradle build: `free -m` and check no other project's Gradle build is running.

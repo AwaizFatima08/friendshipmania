@@ -235,7 +235,7 @@ class _DeleteDialogState extends State<_DeleteDialog> {
               autocorrect: false,
               enableSuggestions: false,
               decoration: InputDecoration(
-                labelText: 'Confirm your password',
+                labelText: 'Your password',
                 errorText: _error,
                 border: const OutlineInputBorder(),
               ),

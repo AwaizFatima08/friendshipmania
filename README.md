@@ -63,10 +63,25 @@ against in-memory fakes (`test/fakes.dart`) with no Firebase or network.
   address, the only choice Firebase offered). Change it under *Authentication → Sign-in method → Google*.
 
 ### Testing sign-in without touching the real project
-Debug builds only: `flutter run --dart-define=USE_FIREBASE_EMULATOR=true` points the app at
-Firebase emulators on `localhost` (Auth 9099, Firestore 8080; from a phone use
-`adb reverse tcp:9099 tcp:9099 tcp:8080 tcp:8080`). The switch is guarded by `kDebugMode`,
-so it cannot be enabled in a release build.
+Debug builds only. Needs Java 21 for firebase-tools (this PC has 17; a portable JDK was used via `JAVA_HOME`).
+
+```bash
+JAVA_HOME=/path/to/jdk-21 firebase emulators:start --only auth,firestore   # Auth 9099, Firestore 8180
+adb reverse tcp:9099 tcp:9099
+adb reverse tcp:8180 tcp:8180
+flutter run --dart-define=USE_FIREBASE_EMULATOR=true          # real phone (host 127.0.0.1)
+#  Android emulator instead: add --dart-define=EMULATOR_HOST=10.0.2.2
+```
+- `kDebugMode` guards the switch, so it can never be on in a release build.
+- FlutterFire rewrites `localhost`/`127.0.0.1` to `10.0.2.2` unless `automaticHostMapping: false` (set in `main.dart`).
+- Cleartext to the emulators is allowed only by `android/app/src/debug/res/xml/network_security_config.xml`
+  (debug source set); release stays HTTPS-only.
+- Port 8080 is taken on this PC by another service, hence Firestore on 8180.
+
+### Firestore security-rules tests
+`test_rules/rules.test.mjs` (19 attack-style tests: cross-user reads/writes, field smuggling, bad types/sizes,
+backdated timestamps, editing verdicts, unused paths). With the Firestore emulator running:
+`cd test_rules && npm install && npm test`. Mutation-checked: weakening the rules makes them fail.
 
 ## Building & testing
 
