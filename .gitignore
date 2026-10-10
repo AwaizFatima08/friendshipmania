@@ -19,3 +19,6 @@ build/
 /Screenshot_*.jpg
 /Screenshot_*.png
 /friendshipmania_report_*.png
+
+# Firebase client config (per-project, kept out of the public repo like friend_zone does)
+android/app/google-services.json

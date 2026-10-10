@@ -76,7 +76,7 @@ Future<ReportSaveResult> saveReportToGallery(Uint8List bytes) async {
     if (!hasAccess) {
       return const ReportSaveResult(
         success: false,
-        message: "Couldn't save — photo/gallery permission was denied.",
+        message: "Couldn't save — gallery permission was denied. (We only want your photos app, not your photos.)",
       );
     }
 
@@ -87,7 +87,7 @@ Future<ReportSaveResult> saveReportToGallery(Uint8List bytes) async {
     );
     return const ReportSaveResult(
       success: true,
-      message: 'Saved to your gallery in the "friendshipmania" album.',
+      message: 'Saved to your gallery ("friendshipmania" album). Flex responsibly. 💪',
     );
   } on GalException catch (e) {
     return ReportSaveResult(success: false, message: 'Save failed: ${e.type.message}');
@@ -114,10 +114,11 @@ Future<void> shareReport({
   final title = sanitizeForShareText(verdictTitle);
 
   final text =
-      '🕵️ $you just put the friendship with $friend through the '
-      'friendshipmania polygraph and scored $percent% — "$title"!\n\n'
-      "Think $friend would score it differently? Get friendshipmania and "
-      'drop your own verdict on this friendship 👉 $playStoreUrl';
+      '🕵️ I just put my friendship with $friend on trial and the polygraph '
+      'said $percent% — "$title" 💀\n\n'
+      "$friend, take the test and tell me I'm wrong. "
+      'The lie detector is waiting 👉 $playStoreUrl\n\n'
+      '— $you';
 
   final file = await _writeTempPng(bytes, 'friendshipmania_report');
 

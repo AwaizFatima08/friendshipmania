@@ -1,0 +1,47 @@
+rules_version = '2';
+
+// friendshipmania: each signed-in user can only touch their own data.
+//   users/{uid}                -> profile (name + email)
+//   users/{uid}/reports/{id}   -> saved verdicts (create/read/delete, never edited)
+// Everything else is closed. Field checks stop a tampered client from
+// storing oversized or malformed documents.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    match /users/{uid} {
+      allow read, delete: if isOwner(uid);
+      allow create, update: if isOwner(uid)
+        && request.resource.data.keys().hasOnly(['displayName', 'email', 'updatedAt'])
+        && request.resource.data.displayName is string
+        && request.resource.data.displayName.size() <= 100
+        && request.resource.data.email is string
+        && request.resource.data.email.size() <= 320;
+
+      match /reports/{reportId} {
+        allow read, delete: if isOwner(uid);
+        allow create: if isOwner(uid)
+          && request.resource.data.keys().hasOnly([
+               'yourName', 'friendName', 'percent', 'bandTitle',
+               'bandEmoji', 'tagPercents', 'createdAt'])
+          && request.resource.data.yourName is string
+          && request.resource.data.yourName.size() <= 60
+          && request.resource.data.friendName is string
+          && request.resource.data.friendName.size() <= 60
+          && request.resource.data.percent is int
+          && request.resource.data.percent >= 0
+          && request.resource.data.percent <= 100
+          && request.resource.data.bandTitle is string
+          && request.resource.data.bandTitle.size() <= 80
+          && request.resource.data.bandEmoji is string
+          && request.resource.data.bandEmoji.size() <= 16
+          && request.resource.data.tagPercents is map
+          && request.resource.data.createdAt == request.time;
+        allow update: if false;
+      }
+    }
+  }
+}

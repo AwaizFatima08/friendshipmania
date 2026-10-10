@@ -1,9 +1,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- Lets the "Download report" button save the scorecard PNG into the
          device's Gallery/Pictures on Android 9 and below (Android 10+ uses
-         scoped storage and needs no permission for this). No INTERNET
-         permission is requested anywhere in this app — it makes no network
-         calls at all. -->
+         scoped storage and needs no permission for this). INTERNET and
+         ACCESS_NETWORK_STATE are merged in automatically by the Firebase
+         plugins; they are needed for sign-in and for saving verdicts. -->
     <uses-permission
         android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="29" />
@@ -53,6 +53,16 @@
         <intent>
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
+        </intent>
+        <!-- url_launcher: open the privacy policy / terms in a browser and
+             the support address in a mail app (Android 11+ package visibility). -->
+        <intent>
+            <action android:name="android.intent.action.VIEW"/>
+            <data android:scheme="https"/>
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.SENDTO"/>
+            <data android:scheme="mailto"/>
         </intent>
     </queries>
 </manifest>

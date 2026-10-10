@@ -1,146 +1,105 @@
 # friendshipmania
 
-A funny, no-login friendship-compatibility quiz for two friends. Full design
-background is in `docs/friendship-meter-spec-v2.md`; this file documents what
-is actually built and how to build/test/release it.
+A funny, Gen Z friendship "lie detector" for Android. Two names, ten unhinged
+questions, one brutally honest verdict you can download or share.
 
 ## What the app does
 
-1. **Welcome screen** → **Enter both names** (no login, no email, nothing
-   remembered between sessions).
-2. **Quiz** → 10 random, illogical-but-hilarious questions about the
-   friendship, sampled from a bank of 40 across 5 tags (roast, loyalty,
-   chaos, receipts, nostalgia), so runs vary.
-3. **Report** → a percentage score, a roast-y verdict title, and a
-   per-category breakdown, all rendered as a shareable scorecard.
-4. **Download** → saves the scorecard PNG into the device's own Gallery
-   (a "friendshipmania" album).
-5. **Share** → opens Android's native share sheet with the scorecard image
-   and an invite message, so the friend can install the app and generate
-   their own reciprocal report about the same friendship.
+1. **Welcome** → tap *Start the Interrogation*. Signed-out users see the
+   sign-in screen once per launch (they can **Skip**).
+2. **Sign in / sign up** (optional): email + password, or Google.
+3. **Names** → **10 random questions** from a bank of 40 (answers shuffled).
+4. **Verdict** → percentage, roast-y title, per-category breakdown, rendered
+   as a shareable scorecard.
+5. **Download** (to the phone's gallery) or **Share** (Android share sheet,
+   with a funny invite message so the friend can run their own test).
+6. **Signed-in extras:** every verdict is auto-saved to *My verdicts*;
+   *My account* has sign-out and **Delete account & data**.
+7. **Sound:** quiet looping music + short effects, with a mute toggle
+   (hidden until audio assets are bundled; see "Audio & graphics").
 
-There is **no backend of any kind** — no Firebase, no login, no server. Each
-person's report is generated entirely on their own device. "Reciprocal"
-means each friend independently runs the quiz and shares their own result,
-not a synced/joint score requiring both devices to be online together. This
-was a deliberate simplification from the original design doc's Firebase-based
-plan (see `docs/friendship-meter-spec-v2.md` §9 for that superseded
-approach) — it removes the app's only real complexity and its only
-dependency on an internet connection, at the cost of not having a single
-combined "compatibility %" between both friends.
-
-## Project structure
+## Architecture
 
 ```
 lib/
-  data/question_bank.dart       — the 40-question bank
-  models/question.dart          — Question / AnswerOption data classes
-  services/scoring.dart         — sampling, percent scoring, tag breakdown
-  services/report_service.dart  — image capture, gallery save, share sheet
-  screens/                      — welcome → names → question → result
-  widgets/
-    friendship_meter.dart       — animated percent/emoji meter
-    report_card.dart            — the actual shareable/downloadable card
-assets/icon/                    — source SVGs for the launcher icon + feature graphic
-graphics/store/                 — generated Play Store graphics (icon, feature graphic)
-docs/
-  privacy-policy.html           — ready to upload to homilabs.org
-  play-store-listing.md         — listing copy, ready to paste into Play Console
-  friendship-polygraph-command-board.md — session-to-session working notes
-android/
-  key.properties, keystore/     — release signing (gitignored, back these up yourself!)
+  main.dart                      Firebase init, wires real services
+  config.dart                    site URLs, support email, attribution lines
+  data/question_bank.dart        40 questions (best answer listed first; shuffled at runtime)
+  services/
+    auth_service.dart            AuthService interface + FirebaseAuthService (email + Google)
+    user_data_service.dart       UserDataService interface + Firestore implementation
+    audio_service.dart           AudioService (+ no-op); mixes with other apps, pauses in background
+    app_services.dart            InheritedWidget handing services to screens
+    scoring.dart / report_service.dart
+  screens/                       welcome, auth, names, question, result, history, account, about
+  widgets/                       gradient_page, report_card, mute_button, friendship_meter
+firestore.rules                  owner-only rules with field validation
+site/friendshipmania/            the friendshipmania.homilabs.org pages + upload zip
 ```
 
-## Toolchain
+Screens depend only on the abstract services, so the whole app is tested
+against in-memory fakes (`test/fakes.dart`) with no Firebase or network.
 
-Built and verified against what's actually installed on this machine:
-Flutter 3.41.9 / Dart 3.11.5 / AGP 8.11.1 / Kotlin 2.2.20 / Gradle 8.14 /
-Java 17 / Android SDK 36 (compile & target), minSdk 24.
+## Firebase
 
-If a future session upgrades the local Flutter SDK, re-check these versions
-against `flutter create`'s own defaults (see the note in the command board
-doc) rather than assuming they still match — that mismatch is exactly what
-caused the Stage 1 hand-off from a cloud sandbox to need realignment here.
+| | |
+|---|---|
+| Project | `friendshipmania-homilabs` (Spark/free plan) |
+| Android app | `com.homilabs.friendshipmania` |
+| Auth providers | Email/Password, Google |
+| Firestore | `(default)`, **asia-south1 (Mumbai)**, production mode + `firestore.rules` |
+| Registered SHA fingerprints | debug SHA-1/256 and release SHA-1/256 |
+
+- `android/app/google-services.json` is **gitignored** (public repo). Re-create it with
+  `firebase apps:sdkconfig ANDROID 1:257734654157:android:d560ace9ba560acbca9184 --project friendshipmania-homilabs > android/app/google-services.json`
+- Data layout: `users/{uid}` (profile) and `users/{uid}/reports/{id}` (saved verdicts).
+  Rules let a user touch only their own documents and validate field types/sizes.
+  Deploy with `firebase deploy --only firestore:rules`.
+- **After the first Play upload:** Google re-signs the app with a *Play App Signing* key.
+  Copy its SHA-1 and SHA-256 (Play Console → *App integrity*) into Firebase
+  (*Project settings → your Android app → Add fingerprint*), re-download
+  `google-services.json`, or **Google sign-in will fail** for Play-installed builds.
+- The Google consent screen shows the project support email (currently the account owner's
+  address, the only choice Firebase offered). Change it under *Authentication → Sign-in method → Google*.
+
+### Testing sign-in without touching the real project
+Debug builds only: `flutter run --dart-define=USE_FIREBASE_EMULATOR=true` points the app at
+Firebase emulators on `localhost` (Auth 9099, Firestore 8080; from a phone use
+`adb reverse tcp:9099 tcp:9099 tcp:8080 tcp:8080`). The switch is guarded by `kDebugMode`,
+so it cannot be enabled in a release build.
 
 ## Building & testing
 
 ```bash
 flutter pub get
-flutter analyze          # must show 0 issues
-flutter test              # unit + widget tests, see test/ below
-flutter build apk --debug              # quick sideload build
-flutter build appbundle --release      # Play Store upload format (.aab)
+flutter analyze            # must show 0 issues
+flutter test --concurrency=1
+flutter build apk --debug --target-platform android-arm64
+flutter build appbundle --release
 ```
 
-If a release Gradle build ever fails with `Java heap space` on this machine:
-run `cd android && ./gradlew --stop` first to kill any stray Gradle daemon
-left over from a previous session, then retry. `android/gradle.properties`
-is already tuned to `-Xmx2g`, no daemon, no parallel execution — the same
-fix noted in the command board doc for sibling Homilabs apps — but a leaked
-daemon from *before* that config existed can still be sitting in memory.
-
-### Test coverage
-
-- `test/widget_test.dart` — core user flow (welcome → names → quiz →
-  scorecard), input validation, and a fast-double-tap stress test on the
-  question flow (see "Bugs found & fixed" below).
-- `test/scoring_test.dart` — 500-iteration fuzz test on the scoring math and
-  tag breakdown, plus edge cases (empty run, out-of-range percent input).
-- `test/question_bank_test.dart` — data-integrity checks on all 40 questions
-  (unique ids, non-empty prompts/options, correct `maxScore`).
-- `test/report_service_test.dart` — share-text sanitization (whitespace,
-  newlines, length cap) and the Play Store URL constant.
-- `test/report_card_test.dart` — layout/overflow checks on the report card at
-  0%, 100%, max-length names, and a full 5-tag breakdown.
-
-### Bugs found & fixed during this build
-
-- **Double-tap race in the question flow**: tapping an answer button twice
-  in fast succession (before Flutter's rebuild lands) could double-advance
-  the quiz or fire the last-question navigation twice. Fixed with a `_locked`
-  guard in `question_screen.dart`; covered by a dedicated test.
-- **Duplicate quiz screens from a fast double-tap on "Start the quiz"**:
-  same class of bug on the names screen; fixed with a `_submitting` guard
-  that re-enables once the user returns to that screen.
+**This machine is shared with other builds.** Before any Gradle build check `free -m`
+and that no other project's Gradle build is running. `android/gradle.properties` is tuned
+for low memory (`-Xmx2g`, no daemon, Kotlin in-process, 2 workers). If a build is killed
+(exit 143) or `Java heap space` appears, a neighbour's idle daemon is usually holding RAM:
+wait for it rather than stopping their daemon.
 
 ## Release signing
 
-`android/key.properties` and `android/keystore/friendshipmania-release.jks`
-were generated on this machine (RSA 2048, alias `friendshipmania`, valid
-~27 years). **Both files are gitignored on purpose — back them up yourself,
-somewhere durable, right now.** If you lose this keystore, you permanently
-lose the ability to publish updates to this same Play Store listing; Google
-cannot recover or reset it for you. A copy was also placed outside this
-project's git tree at `../friendshipmania-secrets/` on this machine as a
-first backup — move that somewhere more durable (a password manager, an
-encrypted drive) rather than leaving it as the only copy.
+`android/key.properties` and `android/keystore/friendshipmania-release.jks` are generated
+locally and **gitignored**. Back them up somewhere durable: losing the keystore means losing
+the ability to update the Play listing. A first copy sits in `../friendshipmania-secrets/`.
 
-## Security posture
+## Security notes
 
-- **No `INTERNET` permission at all** — verified against the built APK's
-  merged manifest. The app cannot make a network request even if compromised.
-- Only permissions requested: `WRITE_EXTERNAL_STORAGE` /
-  `READ_EXTERNAL_STORAGE`, both capped at `maxSdkVersion="29"` (needed only
-  for the gallery-save feature on old Android versions; not requested at all
-  on Android 11+).
-- `android:allowBackup="false"` — no app data is swept into Android's
-  auto-backup.
-- Release builds are minified and resource-shrunk (R8), signed with a
-  dedicated release keystore (not debug-signed).
-- Share-sheet text (names, verdict title) is sanitized before being embedded
-  in the invite message — newlines/control characters stripped, length capped.
-- No third-party SDKs, analytics, ads, or crash reporting of any kind.
+- Network use is limited to Firebase (HTTPS). `INTERNET` is merged from the Firebase plugins.
+- Firestore: owner-only rules with field validation (`firestore.rules`); no public reads.
+- Passwords are handled by Firebase Auth only; the app never stores them. Wrong credentials
+  all return one generic message (no account probing).
+- Account deletion re-verifies the user **first**, then deletes data, then the account.
+- Release builds are R8-minified, signed with the release key, `allowBackup=false`.
+- Storage permissions are capped at `maxSdkVersion=29`.
+- Share text is sanitised (control characters stripped, length capped).
 
-## Known follow-ups (not yet done)
-
-1. **Real on-device screenshots for the Play Store listing** — blocked on
-   either KVM access for the local emulator or a physical device connected
-   over `adb`. See `docs/play-store-listing.md`.
-2. **Fill in the contact email placeholder** in
-   `docs/privacy-policy.html` before uploading it to homilabs.org.
-3. **Update the Play Store URL placeholder** in
-   `lib/services/report_service.dart` (`playStoreUrl`) once the app is
-   actually live, if the package name or listing URL ever changes.
-4. Play Console submission itself (content rating questionnaire, data safety
-   form, actual upload) — this needs your Play Console login, which this
-   session doesn't have.
+## Known follow-ups
+See `docs/friendship-polygraph-command-board.md` ("Open follow-ups").

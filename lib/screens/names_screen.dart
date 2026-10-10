@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../services/app_services.dart';
 import '../widgets/gradient_page.dart';
+import '../widgets/mute_button.dart';
 import 'question_screen.dart';
 
 class NamesScreen extends StatefulWidget {
@@ -15,6 +17,21 @@ class _NamesScreenState extends State<NamesScreen> {
   final _yourNameController = TextEditingController();
   final _friendNameController = TextEditingController();
   bool _submitting = false;
+  bool _prefilled = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (_prefilled) return;
+    _prefilled = true;
+    final user = AppServices.of(context).auth.currentUser;
+    if (user != null && _yourNameController.text.isEmpty) {
+      final name = user.shortName;
+      _yourNameController.text = name.length > 30
+          ? name.substring(0, 30)
+          : name;
+    }
+  }
 
   @override
   void dispose() {
@@ -46,7 +63,7 @@ class _NamesScreenState extends State<NamesScreen> {
 
   String? _requiredValidator(String? value) {
     if (value == null || value.trim().isEmpty) {
-      return 'Kind of need a name here.';
+      return 'Kind of need a name here. Even a nickname. Even "Bestie #3".';
     }
     return null;
   }
@@ -54,8 +71,12 @@ class _NamesScreenState extends State<NamesScreen> {
   @override
   Widget build(BuildContext context) {
     return GradientPage(
-      appBar: AppBar(title: const Text('Who are we interrogating? 🔍')),
-      body: Padding(
+      appBar: AppBar(
+        title: const Text("Who's on trial? 🔍"),
+        actions: const [MuteButton()],
+      ),
+      body: SingleChildScrollView(
+        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
         padding: const EdgeInsets.all(24),
         child: Form(
           key: _formKey,
@@ -63,10 +84,10 @@ class _NamesScreenState extends State<NamesScreen> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'No login, no email, no nonsense bestie. Just two names.',
+                "Two names. That's it. We'll handle the drama. 🍿",
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                      color: Colors.white.withValues(alpha: 0.95),
-                    ),
+                  color: Colors.white.withValues(alpha: 0.95),
+                ),
               ),
               const SizedBox(height: 28),
               TextFormField(
@@ -81,8 +102,9 @@ class _NamesScreenState extends State<NamesScreen> {
                 controller: _friendNameController,
                 textCapitalization: TextCapitalization.words,
                 maxLength: 30,
-                decoration:
-                    const InputDecoration(labelText: "Your friend's name"),
+                decoration: const InputDecoration(
+                  labelText: "Your friend's name",
+                ),
                 validator: _requiredValidator,
               ),
               const SizedBox(height: 16),

@@ -10,11 +10,15 @@ const List<Color> appGradientColors = [
   Color(0xFFFF5DA2),
 ];
 
-/// A Scaffold with the shared gradient backdrop already wired up, so every
-/// screen after the welcome screen feels like the same app instead of the
-/// launch screen being a one-off. `appBar` gets the transparent/white
-/// styling from [buildAppTheme]'s `appBarTheme` automatically — nothing
-/// extra to do per-screen for that.
+/// A transparent Scaffold on top of the shared gradient, so every screen
+/// after the welcome screen feels like the same app.
+///
+/// The gradient sits *outside* the Scaffold on purpose. A short
+/// `SingleChildScrollView` body shrink-wraps to its content, so a gradient
+/// painted inside the body used to stop partway down the screen on forms
+/// like the names screen. Here it always fills the whole window (including
+/// behind the app bar), whatever the body's size. `appBar` gets the
+/// transparent/white styling from [buildAppTheme]'s `appBarTheme`.
 class GradientPage extends StatelessWidget {
   final PreferredSizeWidget? appBar;
   final Widget body;
@@ -23,24 +27,18 @@ class GradientPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: appGradientColors.first,
-      appBar: appBar,
-      body: Stack(
-        children: [
-          const Positioned.fill(
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: appGradientColors,
-                ),
-              ),
-            ),
-          ),
-          SafeArea(child: body),
-        ],
+    return DecoratedBox(
+      decoration: const BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: appGradientColors,
+        ),
+      ),
+      child: Scaffold(
+        backgroundColor: Colors.transparent,
+        appBar: appBar,
+        body: SafeArea(child: body),
       ),
     );
   }

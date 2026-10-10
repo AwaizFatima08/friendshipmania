@@ -41,37 +41,37 @@ const List<ScoreBand> soloScoreBands = [
   ScoreBand(
     minPercent: 0,
     maxPercent: 20,
-    emoji: '🧊',
-    title: 'Certified Frenemies',
-    subtitle: "Your answers read like a hostage statement. Somebody needs a talk.",
+    emoji: '❄️',
+    title: 'Frenemies With Wi-Fi',
+    subtitle: "Your answers read like a hostage note. Someone's contacts list needs a glow-up.",
   ),
   ScoreBand(
     minPercent: 21,
     maxPercent: 40,
-    emoji: '🤨',
+    emoji: '🤔',
     title: 'Friendship, Allegedly',
-    subtitle: "It's giving 'we follow each other on Instagram.' Room to grow.",
+    subtitle: "It's giving 'we follow each other and that's it.' Lawyers are still checking.",
   ),
   ScoreBand(
     minPercent: 41,
     maxPercent: 60,
     emoji: '🍿',
-    title: 'Solid Acquaintance, Occasional Friend',
-    subtitle: "Reliable, mostly drama-free, definitely invited to the group hangout.",
+    title: 'Side-Quest Besties',
+    subtitle: "Fun, mostly drama-free, invited to the hangout but not the group trip.",
   ),
   ScoreBand(
     minPercent: 61,
     maxPercent: 80,
     emoji: '🔥',
-    title: 'Actual Real Friends',
-    subtitle: "This is a genuine, load-bearing friendship. Respect.",
+    title: 'Actual Real Friends, No Cap',
+    subtitle: "Genuine, load-bearing friendship. Your aura just levelled up.",
   ),
   ScoreBand(
     minPercent: 81,
     maxPercent: 100,
     emoji: '👑',
-    title: 'Ride-or-Die, No Notes',
-    subtitle: "Certified soulmates. Send this scorecard before they forget how lucky they are.",
+    title: 'Ride-or-Die Main Characters',
+    subtitle: "Certified soulmates. Send this before they realise how lucky they are. (They already know.)",
   ),
 ];
 
@@ -109,10 +109,10 @@ class TagScore {
 
 const Map<String, String> _tagLabels = {
   'roast': '🔥 Roast Resilience',
-  'loyalty': '🛡️ Loyalty',
+  'loyalty': '🛡️ Ride-or-Die Index',
   'chaos': '🎢 Chaos Compatibility',
-  'receipts': '🧾 Brutal Honesty',
-  'nostalgia': '📼 History Together',
+  'receipts': '📝 Brutal Honesty',
+  'nostalgia': '📼 Lore Together',
 };
 
 /// Breaks a quiz run down by question tag, so the report can show more than
