@@ -51,16 +51,30 @@ friendship lie-detector quiz. Original docs (`friendship-meter-spec*.md`) are hi
   release-grade cleartext block also blocked the emulators (fixed with a debug-only network config);
   delete-dialog label truncated at large text (shortened).
 
+### Assets integrated (Homi approved 2026-10-10)
+- Mascot (job 20261010-1125-…-icon-01) on welcome + About + launcher icon (neon-lime background).
+- Verdict stickers (1125-icon-02/03, 1126-icon-01, 1127-icon-01/02) on the scorecard and shared image.
+- SFX: tap = 1129-sfx-01, answer = 1129-sfx-03, reveal = 1130-sfx-01 (chosen by Claude on objective grounds;
+  other approved candidates remain in `~/ai-inbox/friendshipmania/` — swap = change the path in `audio_service.dart`).
+- "Powered by Stability AI" on About (`lib/config.dart`) and in the store description. `release-check.sh`: PASS.
+- `lib/widgets/cropped_art.dart` shows only the measured artwork rectangle of each cutout (they have wide
+  transparent margins); `test/art_test.dart` enforces a crop entry per art file.
+- Note: release-check requires the folder of every registered file in pubspec, so the unused `_raw.png`
+  copies are bundled (~3.4 MB). Possible tooling tweak for Homi: integrate only `_cutout.png` for icon-cutout jobs.
+
+### Release
+- Final signed `app-release.aab` 1.0.0 (1) and split APKs built; release APK smoke-tested on the A12 (no crashes,
+  cold start ~6 s). Store screenshots `graphics/store/screenshot_1..4.png`. Upload guide: `docs/play-console-upload.md`.
+
 ### Still NOT verified / not done
-1. **Real Google sign-in** (needs the owner's Google account on a device). Email sign-in against the real
-   project is also untested on purpose (no accounts were created in production).
-2. **No release (R8) build since the Firebase change** — do one before upload and smoke-test sign-in.
-3. **homidev assets** — 8 images + 9 sfx generated, all Stage 1 PASS, review sheet
-   `~/ai-inbox/friendshipmania/review-20261010-1130.html` **awaiting Homi's approve/reject**. Nothing integrated.
-4. **Music blocked:** all 3 `music-loop-basic` jobs failed Stage 1 identically — OGG true peak -0.3 to -0.5 dBFS
-   vs the -1 dBFS limit. Systematic (receiver/recipe limiter ceiling vs OGG overshoot) — Homi's to fix on homidev.
-   Rejected files are in `~/ai-inbox/_rejected/`; must not be used.
-5. Site not deployed (Hostinger login). Play: owner uploads; checklist to be prepared with the final AAB.
+1. **Real Google sign-in** (needs the owner's Google account). After the first Play upload, add the
+   Play App Signing SHA-1/256 to Firebase or Google sign-in fails for Play installs.
+2. **Music blocked:** `music-loop-basic` outputs fail Stage 1 (OGG true peak about -0.4 dBFS vs -1 limit) — Homi's
+   to fix on homidev. App runs without music; mute button controls the sfx.
+3. Site not deployed (Hostinger login). Play submission is the owner's (guide ready).
+4. **Shared phone incident (2026-10-10):** the A12 was also being used by the takhti_grow session; one batch
+   of my adb taps/typing landed in TakhtiGrow (navigation only, nothing destructive). Always check the
+   foreground package before sending adb input.
 
 ## Machine rules (this PC is shared with other Claude sessions/projects)
 - Before any Gradle build: `free -m` and check no other project's Gradle build is running.

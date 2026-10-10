@@ -64,7 +64,11 @@ class ReportCard extends StatelessWidget {
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 20),
-                  FriendshipMeter(percent: percent, emoji: band.emoji),
+                  FriendshipMeter(
+                    percent: percent,
+                    emoji: band.emoji,
+                    sticker: band.sticker,
+                  ),
                   const SizedBox(height: 20),
                   Text(
                     band.title,

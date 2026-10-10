@@ -9,6 +9,13 @@ const String deleteAccountUrl = '$siteBase/delete-account.html';
 /// Public support address — the same one already shown on homilabs.org.
 const String supportEmail = 'homilabs.smc@gmail.com';
 
-/// Lines that must be shown on the About screen. Add the Stability AI line
-/// here only once homidev sound effects/music are actually bundled.
-const List<String> attributionLines = [];
+/// Credits shown on the About screen. Must include every line in
+/// assets/ATTRIBUTION.md (release-check.sh fails the build otherwise).
+const List<String> attributionLines = [
+  'Sound effects: Powered by Stability AI',
+  'Mascot and sticker art made with AI tools and reviewed by HomiLabs',
+];
+
+/// The detective-bean mascot (approved homidev asset, see ASSET-REGISTER.md).
+const String mascotAsset =
+    'assets/images/20261010-1125-friendshipmania-icon-01_cutout.png';

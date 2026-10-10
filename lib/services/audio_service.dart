@@ -7,10 +7,13 @@ import 'package:flutter/widgets.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 /// Short UI sounds. The file for each lives in `assets/audio/sfx/`.
+///
+/// File names come straight from the homidev asset register (job IDs), so each
+/// sound can be traced back to its approval in assets/ASSET-REGISTER.md.
 enum Sfx {
-  tap('audio/sfx/tap.ogg'),
-  answer('audio/sfx/answer.ogg'),
-  reveal('audio/sfx/reveal.ogg');
+  tap('audio/sfx/20261010-1129-friendshipmania-sfx-01_sfx.ogg'),
+  answer('audio/sfx/20261010-1129-friendshipmania-sfx-03_sfx.ogg'),
+  reveal('audio/sfx/20261010-1130-friendshipmania-sfx-01_sfx.ogg');
 
   const Sfx(this.assetPath);
 
@@ -18,6 +21,8 @@ enum Sfx {
   final String assetPath;
 }
 
+/// Background loop. Not bundled yet (the music recipe is blocked on homidev);
+/// the service simply skips music until this file exists in the bundle.
 const String musicAssetPath = 'audio/music/loop.ogg';
 
 abstract class AudioService {
@@ -76,7 +81,9 @@ class AppAudioService with WidgetsBindingObserver implements AudioService {
   final Map<Sfx, AudioPlayer> _sfxPlayers = {};
 
   bool _hasAudio = false;
+  bool _hasMusic = false;
   bool _broken = false;
+  bool _musicBroken = false;
   bool _musicWanted = false;
 
   @override
@@ -88,8 +95,9 @@ class AppAudioService with WidgetsBindingObserver implements AudioService {
   Future<void> init() async {
     try {
       final manifest = await AssetManifest.loadFromAssetBundle(rootBundle);
-      _hasAudio =
-          manifest.listAssets().any((a) => a.startsWith('assets/audio/'));
+      final assets = manifest.listAssets();
+      _hasAudio = assets.any((a) => a.startsWith('assets/audio/'));
+      _hasMusic = assets.contains('assets/$musicAssetPath');
       if (!_hasAudio) return;
 
       final prefs = await SharedPreferences.getInstance();
@@ -109,13 +117,15 @@ class AppAudioService with WidgetsBindingObserver implements AudioService {
   @override
   Future<void> startMusic() async {
     _musicWanted = true;
-    if (!hasAudio || _muted.value) return;
+    // A music problem must never silence the sound effects, so it has its
+    // own flag instead of marking the whole service broken.
+    if (!hasAudio || !_hasMusic || _musicBroken || _muted.value) return;
     try {
       if (_music.state != PlayerState.playing) {
         await _music.play(AssetSource(musicAssetPath));
       }
     } catch (_) {
-      _broken = true;
+      _musicBroken = true;
     }
   }
 
@@ -167,6 +177,8 @@ class AppAudioService with WidgetsBindingObserver implements AudioService {
       _music.pause().catchError((_) {});
     } else if (state == AppLifecycleState.resumed &&
         _musicWanted &&
+        _hasMusic &&
+        !_musicBroken &&
         !_muted.value) {
       _music.resume().catchError((_) {});
     }

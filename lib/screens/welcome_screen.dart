@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../config.dart';
 import '../services/app_services.dart';
 import '../services/auth_service.dart';
+import '../widgets/cropped_art.dart';
 import '../widgets/gradient_page.dart';
 import '../widgets/mute_button.dart';
 import 'account_screen.dart';
@@ -127,23 +129,17 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                     _PopIn(
                       child: Center(
                         child: Container(
-                          width: 116,
-                          height: 116,
+                          width: compact ? 170 : 210,
+                          height: compact ? 170 : 210,
                           decoration: BoxDecoration(
-                            color: Colors.white,
+                            color: Colors.white.withValues(alpha: 0.18),
                             shape: BoxShape.circle,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withValues(alpha: 0.18),
-                                blurRadius: 24,
-                                offset: const Offset(0, 10),
-                              ),
-                            ],
                           ),
                           alignment: Alignment.center,
-                          child: const Text(
-                            '🕵️',
-                            style: TextStyle(fontSize: 60),
+                          child: CroppedArt(
+                            asset: mascotAsset,
+                            height: compact ? 140 : 175,
+                            semanticLabel: 'friendshipmania detective mascot',
                           ),
                         ),
                       ),
@@ -290,7 +286,8 @@ class _AccountButton extends StatelessWidget {
             ),
             onPressed: () => Navigator.of(context).push(
               MaterialPageRoute(
-                builder: (_) => const AuthScreen(startOnSignUp: false, allowGuest: false),
+                builder: (_) =>
+                    const AuthScreen(startOnSignUp: false, allowGuest: false),
               ),
             ),
             child: const Text('Sign in'),

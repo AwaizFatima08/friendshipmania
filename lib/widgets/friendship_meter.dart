@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'cropped_art.dart';
+
 /// A big, friendly "meter" bar for the scorecard — an animated fill bar
 /// plus a large emoji and percentage. Deliberately simple (no custom art
 /// assets) so it's cheap to build and easy to re-skin later.
@@ -7,10 +9,14 @@ class FriendshipMeter extends StatelessWidget {
   final int percent;
   final String emoji;
 
+  /// Optional sticker image shown instead of [emoji].
+  final String? sticker;
+
   const FriendshipMeter({
     super.key,
     required this.percent,
     required this.emoji,
+    this.sticker,
   });
 
   @override
@@ -19,7 +25,14 @@ class FriendshipMeter extends StatelessWidget {
 
     return Column(
       children: [
-        Text(emoji, style: const TextStyle(fontSize: 72)),
+        if (sticker != null)
+          CroppedArt(
+            asset: sticker!,
+            height: 120,
+            semanticLabel: 'Verdict sticker',
+          )
+        else
+          Text(emoji, style: const TextStyle(fontSize: 72)),
         const SizedBox(height: 12),
         TweenAnimationBuilder<double>(
           tween: Tween(begin: 0, end: percent / 100),

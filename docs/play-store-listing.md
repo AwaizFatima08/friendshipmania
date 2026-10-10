@@ -56,6 +56,8 @@ YOUR DATA
 If you sign in, your name, email and saved verdicts are stored with Google Firebase so they follow you across phones. You can delete any verdict — or your whole account — from inside the app at any time. We never sell your data. Guests don't have anything stored on our servers. Full details: https://friendshipmania.homilabs.org/privacy.html
 
 For ages 13+. Totally unscientific, deeply accurate, legally unqualified.
+
+Sound effects: Powered by Stability AI.
 ```
 
 ## Data safety form (Play Console → App content)
@@ -85,14 +87,14 @@ For ages 13+. Totally unscientific, deeply accurate, legally unqualified.
 
 | Asset | File | Status |
 |---|---|---|
-| App icon 512×512 | `graphics/store/app_icon_512.png` | ✅ (will be refreshed with the new catchy art) |
-| Feature graphic 1024×500 | `graphics/store/feature_graphic.png` | ✅ (will be refreshed) |
-| Phone screenshots (2–8) | `graphics/store/screenshot_*.png` | ⏳ real on-device captures, after the new UI is installed |
+| App icon 512×512 | `graphics/store/app_icon_512.png` | ✅ mascot on neon lime (rebuild: `assets/icon/build_store_graphics.sh`) |
+| Feature graphic 1024×500 | `graphics/store/feature_graphic.png` | ✅ mascot + verdict stickers |
+| Phone screenshots (2–8) | `graphics/store/screenshot_1..4.png` (720×1440) | ✅ real captures from a Samsung A12: welcome, question, verdict, share/download |
 
 ## Required attribution
-If the app ships sound effects or music from the homidev pipeline (Stable Audio, Stability AI Community Licence),
-the **About screen and this store description must show "Powered by Stability AI"**. Add that line to the
-description above and to `attributionLines` in `lib/config.dart` at the same time as the audio assets.
+The app ships homidev sound effects (Stable Audio, Stability AI Community Licence), so **"Powered by Stability AI"**
+is shown on the About screen (`attributionLines` in `lib/config.dart`) and is in the full description above.
+Keep both if the sounds stay; `release-check.sh` fails the build if the About screen loses it.
 
 ## Release notes (first version)
 

@@ -3,6 +3,7 @@ import 'package:package_info_plus/package_info_plus.dart';
 
 import '../config.dart';
 import '../utils/open_url.dart';
+import '../widgets/cropped_art.dart';
 import '../widgets/gradient_page.dart';
 import '../widgets/mute_button.dart';
 
@@ -21,8 +22,8 @@ class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final white = Theme.of(context).textTheme.bodyLarge?.copyWith(
-          color: Colors.white.withValues(alpha: 0.95),
-        );
+      color: Colors.white.withValues(alpha: 0.95),
+    );
 
     return GradientPage(
       appBar: AppBar(
@@ -32,14 +33,20 @@ class AboutScreen extends StatelessWidget {
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
-          const Center(child: Text('🕵️', style: TextStyle(fontSize: 72))),
+          const Center(
+            child: CroppedArt(
+              asset: mascotAsset,
+              height: 130,
+              semanticLabel: 'friendshipmania detective mascot',
+            ),
+          ),
           const SizedBox(height: 8),
           Center(
             child: Text(
               'friendshipmania',
-              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                    color: Colors.white,
-                  ),
+              style: Theme.of(
+                context,
+              ).textTheme.headlineMedium?.copyWith(color: Colors.white),
             ),
           ),
           Center(
@@ -74,16 +81,19 @@ class AboutScreen extends StatelessWidget {
           _LinkTile(
             icon: Icons.mail_rounded,
             label: 'Contact support',
-            onTap: () => openUrl(context, 'mailto:$supportEmail?subject=friendshipmania'),
+            onTap: () => openUrl(
+              context,
+              'mailto:$supportEmail?subject=friendshipmania',
+            ),
           ),
           if (attributionLines.isNotEmpty) ...[
             const SizedBox(height: 24),
             Text(
               'Credits',
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w800,
-                  ),
+                color: Colors.white,
+                fontWeight: FontWeight.w800,
+              ),
             ),
             const SizedBox(height: 8),
             for (final line in attributionLines)
@@ -99,7 +109,11 @@ class AboutScreen extends StatelessWidget {
 }
 
 class _LinkTile extends StatelessWidget {
-  const _LinkTile({required this.icon, required this.label, required this.onTap});
+  const _LinkTile({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
 
   final IconData icon;
   final String label;
@@ -113,7 +127,10 @@ class _LinkTile extends StatelessWidget {
         color: Colors.white,
         child: ListTile(
           leading: Icon(icon, color: const Color(0xFF5636C4)),
-          title: Text(label, style: const TextStyle(fontWeight: FontWeight.w700)),
+          title: Text(
+            label,
+            style: const TextStyle(fontWeight: FontWeight.w700),
+          ),
           trailing: const Icon(Icons.open_in_new_rounded, size: 18),
           onTap: onTap,
         ),

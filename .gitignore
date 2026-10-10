@@ -24,3 +24,6 @@ build/
 android/app/google-services.json
 firebase-debug.log
 firestore-debug.log
+
+# Intermediate files for assets/icon/build_store_graphics.sh
+assets/icon/.build/

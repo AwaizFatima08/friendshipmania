@@ -20,6 +20,10 @@ class ScoreBand {
   final int minPercent;
   final int maxPercent;
   final String emoji;
+
+  /// Sticker art for the scorecard (asset path). [emoji] stays as the
+  /// lightweight fallback and is what gets saved in a user's history.
+  final String sticker;
   final String title;
   final String subtitle;
 
@@ -27,6 +31,7 @@ class ScoreBand {
     required this.minPercent,
     required this.maxPercent,
     required this.emoji,
+    required this.sticker,
     required this.title,
     required this.subtitle,
   });
@@ -42,27 +47,34 @@ const List<ScoreBand> soloScoreBands = [
     minPercent: 0,
     maxPercent: 20,
     emoji: '❄️',
+    sticker: 'assets/images/20261010-1125-friendshipmania-icon-02_cutout.png',
     title: 'Frenemies With Wi-Fi',
-    subtitle: "Your answers read like a hostage note. Someone's contacts list needs a glow-up.",
+    subtitle:
+        "Your answers read like a hostage note. Someone's contacts list needs a glow-up.",
   ),
   ScoreBand(
     minPercent: 21,
     maxPercent: 40,
     emoji: '🤔',
+    sticker: 'assets/images/20261010-1125-friendshipmania-icon-03_cutout.png',
     title: 'Friendship, Allegedly',
-    subtitle: "It's giving 'we follow each other and that's it.' Lawyers are still checking.",
+    subtitle:
+        "It's giving 'we follow each other and that's it.' Lawyers are still checking.",
   ),
   ScoreBand(
     minPercent: 41,
     maxPercent: 60,
     emoji: '🍿',
+    sticker: 'assets/images/20261010-1126-friendshipmania-icon-01_cutout.png',
     title: 'Side-Quest Besties',
-    subtitle: "Fun, mostly drama-free, invited to the hangout but not the group trip.",
+    subtitle:
+        "Fun, mostly drama-free, invited to the hangout but not the group trip.",
   ),
   ScoreBand(
     minPercent: 61,
     maxPercent: 80,
     emoji: '🔥',
+    sticker: 'assets/images/20261010-1127-friendshipmania-icon-01_cutout.png',
     title: 'Actual Real Friends, No Cap',
     subtitle: "Genuine, load-bearing friendship. Your aura just levelled up.",
   ),
@@ -70,8 +82,10 @@ const List<ScoreBand> soloScoreBands = [
     minPercent: 81,
     maxPercent: 100,
     emoji: '👑',
+    sticker: 'assets/images/20261010-1127-friendshipmania-icon-02_cutout.png',
     title: 'Ride-or-Die Main Characters',
-    subtitle: "Certified soulmates. Send this before they realise how lucky they are. (They already know.)",
+    subtitle:
+        "Certified soulmates. Send this before they realise how lucky they are. (They already know.)",
   ),
 ];
 
@@ -104,7 +118,11 @@ class TagScore {
   final String label;
   final int percent;
 
-  const TagScore({required this.tag, required this.label, required this.percent});
+  const TagScore({
+    required this.tag,
+    required this.label,
+    required this.percent,
+  });
 }
 
 const Map<String, String> _tagLabels = {
@@ -133,8 +151,12 @@ List<TagScore> tagBreakdown(List<Question> questions, List<int> chosenScores) {
   final result = <TagScore>[];
   for (final tag in earnedByTag.keys) {
     final possible = possibleByTag[tag] ?? 0;
-    final percent = possible == 0 ? 0 : ((earnedByTag[tag]! / possible) * 100).round();
-    result.add(TagScore(tag: tag, label: _tagLabels[tag] ?? tag, percent: percent));
+    final percent = possible == 0
+        ? 0
+        : ((earnedByTag[tag]! / possible) * 100).round();
+    result.add(
+      TagScore(tag: tag, label: _tagLabels[tag] ?? tag, percent: percent),
+    );
   }
 
   result.sort((a, b) => b.percent.compareTo(a.percent));

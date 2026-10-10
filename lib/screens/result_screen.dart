@@ -181,12 +181,17 @@ class _ResultScreenState extends State<ResultScreen> {
         children: [
           RepaintBoundary(
             key: _reportKey,
-            child: ReportCard(
-              yourName: widget.yourName,
-              friendName: widget.friendName,
-              percent: _percent,
-              band: _band,
-              breakdown: _breakdown,
+            // Cap text scaling on the card only: very large system text made
+            // the exported image a 1:3.5 strip that social apps crop badly.
+            child: MediaQuery.withClampedTextScaling(
+              maxScaleFactor: 1.15,
+              child: ReportCard(
+                yourName: widget.yourName,
+                friendName: widget.friendName,
+                percent: _percent,
+                band: _band,
+                breakdown: _breakdown,
+              ),
             ),
           ),
           const SizedBox(height: 14),
