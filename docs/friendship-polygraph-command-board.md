@@ -85,6 +85,10 @@ friendship lie-detector quiz. Original docs (`friendship-meter-spec*.md`) are hi
    Sign in details (a reviewer demo account; reviewers can't create accounts), content rating (IARC ToS),
    target audience (locked until Sign in details), then submit Data safety, upload icon/feature/screenshots,
    upload the AAB, add Play App Signing SHA-1/256 to Firebase, and send for review.
+   **Update (later 2026-10-12):** AAB 1.0.0 (1) uploaded to a production draft release with en-US notes.
+   Content rating done (Everyone / PEGI 3 / 3+). Play App Signing SHA-1 `57:EF:C4:…:A5:4E` and SHA-256
+   `28:21:82:…:CF:C0` added to Firebase (6 fingerprints total). Still open: Sign in details (owner),
+   store graphics (owner), then Target audience → submit Data safety → owner sends for review.
 4. **Shared phone incident (2026-10-10):** the A12 was also being used by the takhti_grow session; one batch
    of my adb taps/typing landed in TakhtiGrow (navigation only, nothing destructive). Always check the
    foreground package before sending adb input.
