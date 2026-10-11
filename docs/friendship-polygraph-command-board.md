@@ -69,9 +69,22 @@ friendship lie-detector quiz. Original docs (`friendship-meter-spec*.md`) are hi
 ### Still NOT verified / not done
 1. **Real Google sign-in** (needs the owner's Google account). After the first Play upload, add the
    Play App Signing SHA-1/256 to Firebase or Google sign-in fails for Play installs.
-2. **Music blocked:** `music-loop-basic` outputs fail Stage 1 (OGG true peak about -0.4 dBFS vs -1 limit) — Homi's
-   to fix on homidev. App runs without music; mute button controls the sfx.
-3. Site not deployed (Hostinger login). Play submission is the owner's (guide ready).
+2. **Music blocked (re-probed 2026-10-12, GPU free, same result):** `music-loop-basic` v1.0 fails Stage 1 on
+   true peak. Measured on job 20261012-0156-…-music-01: master FLAC **+0.3 dBTP** (already over 0 after levelling
+   to -16 LUFS), delivered OGG loop **-0.4 dBTP** vs the -1 dBTP limit; loop/BPM/loudness all PASS.
+   Likely fix on homidev (Homi's call): true-peak-aware limiting with a -1.5 dBTP ceiling (e.g. oversample
+   before the limiter, or two-pass `loudnorm=I=-16:TP=-1.5`) and check the *encoded* OGG with `ebur128=peak=true`.
+   Do not re-run music until the recipe changes; never use files from `~/ai-inbox/_rejected/`.
+3. **Site live (2026-10-12):** `https://friendshipmania.homilabs.org/` (+ privacy, terms, delete-account) uploaded
+   to Hostinger `public_html/friendshipmania`, HTTPS OK. Hostinger's placeholder `default.php` is still there
+   (index.html wins).
+   **Play Console (2026-10-12):** app created (id 4975002110374355818, App, Free). Done: privacy URL,
+   ads = No, advertising ID = No, government/financial/health = none, Data safety (saved as **draft**: it
+   can't be submitted until Target audience is done), Entertainment category + contact details, store listing
+   text (draft), production countries = all 178, production release page open. **Owner still has to do:**
+   Sign in details (a reviewer demo account; reviewers can't create accounts), content rating (IARC ToS),
+   target audience (locked until Sign in details), then submit Data safety, upload icon/feature/screenshots,
+   upload the AAB, add Play App Signing SHA-1/256 to Firebase, and send for review.
 4. **Shared phone incident (2026-10-10):** the A12 was also being used by the takhti_grow session; one batch
    of my adb taps/typing landed in TakhtiGrow (navigation only, nothing destructive). Always check the
    foreground package before sending adb input.
