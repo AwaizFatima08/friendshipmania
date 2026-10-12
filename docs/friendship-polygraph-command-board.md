@@ -89,6 +89,12 @@ friendship lie-detector quiz. Original docs (`friendship-meter-spec*.md`) are hi
    Content rating done (Everyone / PEGI 3 / 3+). Play App Signing SHA-1 `57:EF:C4:…:A5:4E` and SHA-256
    `28:21:82:…:CF:C0` added to Firebase (6 fingerprints total). Still open: Sign in details (owner),
    store graphics (owner), then Target audience → submit Data safety → owner sends for review.
+   **SUBMITTED 2026-10-12:** owner finished Sign in details (Firebase test user created in the console),
+   Target audience, Data safety, AI-asset labels (icon + feature graphic), and published **1.0.0 (2)** to
+   **Production** — now *under review*. versionCode 1 was burned by an internal-test release, hence +2.
+   Owner rule: every build goes straight to Production (no testing tracks). Next bump: 1.0.x+3.
+   After approval: update the Play button note on `site/friendshipmania/index.html`, add the app to
+   homilabs.org "Live apps", check the pre-launch report, and test Google sign-in on a Play install.
 4. **Shared phone incident (2026-10-10):** the A12 was also being used by the takhti_grow session; one batch
    of my adb taps/typing landed in TakhtiGrow (navigation only, nothing destructive). Always check the
    foreground package before sending adb input.
