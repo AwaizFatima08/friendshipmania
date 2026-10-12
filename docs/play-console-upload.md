@@ -12,11 +12,10 @@ Play Console → **Create app**
 - App name `friendshipmania` · Default language English · **App** · **Free**
 - Tick the declarations (developer programme policies, US export laws).
 
-## 2. Testing track first
-- **If this Play developer account is a personal account created after Nov 2023:** Google requires a
-  **closed test with at least 12 testers for 14 days** before Production. Create a Closed testing track,
-  add 12+ testers (emails or a Google Group), upload there, and wait out the 14 days.
-- **Organisation account:** you can use **Internal testing** for a quick check, then promote to Production.
+## 2. Track: Production directly
+Homilabs is an organisation account (no 12-tester closed-test rule), and the owner's standing rule is that
+every build goes **straight to Production** — no internal/closed/open testing tracks.
+Test and release → Production → Countries / regions (all) → Create new release.
 
 ## 3. Upload the bundle
 - File: `build/app/outputs/bundle/release/app-release.aab` (version **1.0.0 (1)**, package `com.homilabs.friendshipmania`).
