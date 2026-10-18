@@ -104,6 +104,9 @@ friendship lie-detector quiz. Original docs (`friendship-meter-spec*.md`) are hi
    Release guard: `tool/check_release_ad_ids.sh` + Gradle `preReleaseBuild` check. Not yet seen live on a device
    (the shared tablet was in use). Play Console still to do by owner: Ads = Yes, Advertising ID = Yes,
    Data safety (4 AdMob rows in docs/play-store-listing.md), upload 1.0.1 (3) to Production.
+   **Done 2026-10-18 (Claude, built-in browser):** Ads = Yes, Advertising ID = Yes (analytics/ads/fraud),
+   Data safety AdMob rows (collected + shared, required), description "no ads" line replaced, release
+   3 (1.0.1) at 100% rollout saved. Publishing overview: 4 changes waiting — owner presses "Send for review".
 4. **Shared phone incident (2026-10-10):** the A12 was also being used by the takhti_grow session; one batch
    of my adb taps/typing landed in TakhtiGrow (navigation only, nothing destructive). Always check the
    foreground package before sending adb input.
