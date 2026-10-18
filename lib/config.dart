@@ -11,8 +11,8 @@ const String deleteAccountUrl = '$siteBase/delete-account.html';
 /// release build simply shows no ads; debug builds always use Google's test
 /// unit. The AdMob *app* ID lives in android/app/build.gradle.kts.
 /// tool/check_release_ad_ids.sh refuses a release while these are unset.
-const String admobBannerResultUnitId = '';
-const String admobBannerHistoryUnitId = '';
+const String admobBannerResultUnitId = 'ca-app-pub-2087846699268567/7073121834';
+const String admobBannerHistoryUnitId = 'ca-app-pub-2087846699268567/7974220099';
 
 /// Public support address — the same one already shown on homilabs.org.
 const String supportEmail = 'homilabs.smc@gmail.com';

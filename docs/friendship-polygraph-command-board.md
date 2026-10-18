@@ -95,6 +95,15 @@ friendship lie-detector quiz. Original docs (`friendship-meter-spec*.md`) are hi
    Owner rule: every build goes straight to Production (no testing tracks). Next bump: 1.0.x+3.
    After approval: update the Play button note on `site/friendshipmania/index.html`, add the app to
    homilabs.org "Live apps", check the pre-launch report, and test Google sign-in on a Play install.
+   **1.0.0 went live** (Play listing returns the app, ~2026-10-18).
+5. **AdMob (2026-10-18, 1.0.1+3):** banners on the verdict + My verdicts screens only (never the quiz, never
+   inside the shared scorecard), UMP consent, "Privacy & ad choices" on About when required, ads capped at T.
+   AdMob account homilabs.smc@gmail.com (pub-2087846699268567): app `ca-app-pub-2087846699268567~8386203500`,
+   units Result `…/7073121834`, History `…/7974220099`; AdMob app review pending (limited serving meanwhile).
+   app-ads.txt on homilabs.org (already) + friendshipmania.homilabs.org. Privacy/terms/index updated + uploaded.
+   Release guard: `tool/check_release_ad_ids.sh` + Gradle `preReleaseBuild` check. Not yet seen live on a device
+   (the shared tablet was in use). Play Console still to do by owner: Ads = Yes, Advertising ID = Yes,
+   Data safety (4 AdMob rows in docs/play-store-listing.md), upload 1.0.1 (3) to Production.
 4. **Shared phone incident (2026-10-10):** the A12 was also being used by the takhti_grow session; one batch
    of my adb taps/typing landed in TakhtiGrow (navigation only, nothing destructive). Always check the
    foreground package before sending adb input.

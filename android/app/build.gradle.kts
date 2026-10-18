@@ -19,7 +19,7 @@ if (hasReleaseSigning) {
 // AdMob app ID for release builds (AdMob → Apps → friendshipmania → App settings).
 // Not a secret: it ships in every APK. Debug/profile builds use Google's sample
 // app ID so test ads never touch the real account.
-val admobReleaseAppId = ""
+val admobReleaseAppId = "ca-app-pub-2087846699268567~8386203500"
 val admobSampleAppId = "ca-app-pub-3940256099942544~3347511713"
 
 android {
