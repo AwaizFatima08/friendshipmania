@@ -1,0 +1,5 @@
+name: qrgen
+environment:
+  sdk: ^3.0.0
+dependencies:
+  qr: 3.0.2

@@ -27,3 +27,8 @@ firestore-debug.log
 
 # Intermediate files for assets/icon/build_store_graphics.sh
 assets/icon/.build/
+
+# Intermediate files and pub state for marketing/launch
+marketing/launch/.build/
+marketing/launch/qrgen/.dart_tool/
+marketing/launch/qrgen/pubspec.lock
