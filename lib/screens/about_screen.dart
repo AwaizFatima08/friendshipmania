@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 
 import '../config.dart';
+import '../services/app_services.dart';
 import '../utils/open_url.dart';
 import '../widgets/cropped_art.dart';
 import '../widgets/gradient_page.dart';
@@ -73,6 +74,20 @@ class AboutScreen extends StatelessWidget {
             label: 'Terms of use',
             onTap: () => openUrl(context, termsUrl),
           ),
+          // GDPR: users in the EEA/UK must be able to change their ad
+          // consent at any time. Shown only where Google's UMP requires it.
+          FutureBuilder<bool>(
+            future: AppServices.of(context).ads.privacyOptionsRequired(),
+            builder: (context, snap) => snap.data == true
+                ? _LinkTile(
+                    icon: Icons.tune_rounded,
+                    label: 'Privacy & ad choices',
+                    external: false,
+                    onTap: () =>
+                        AppServices.of(context).ads.showPrivacyOptions(),
+                  )
+                : const SizedBox.shrink(),
+          ),
           _LinkTile(
             icon: Icons.delete_forever_rounded,
             label: 'Delete my account & data',
@@ -113,11 +128,15 @@ class _LinkTile extends StatelessWidget {
     required this.icon,
     required this.label,
     required this.onTap,
+    this.external = true,
   });
 
   final IconData icon;
   final String label;
   final VoidCallback onTap;
+
+  /// Opens a web page / mail app (shows the "leaves the app" icon).
+  final bool external;
 
   @override
   Widget build(BuildContext context) {
@@ -131,7 +150,10 @@ class _LinkTile extends StatelessWidget {
             label,
             style: const TextStyle(fontWeight: FontWeight.w700),
           ),
-          trailing: const Icon(Icons.open_in_new_rounded, size: 18),
+          trailing: Icon(
+            external ? Icons.open_in_new_rounded : Icons.chevron_right_rounded,
+            size: external ? 18 : 24,
+          ),
           onTap: onTap,
         ),
       ),

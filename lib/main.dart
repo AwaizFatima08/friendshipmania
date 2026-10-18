@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -5,6 +7,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 import 'screens/welcome_screen.dart';
+import 'services/ads_service.dart';
 import 'services/app_services.dart';
 import 'services/audio_service.dart';
 import 'services/auth_service.dart';
@@ -39,11 +42,16 @@ Future<void> main() async {
   final audio = AppAudioService();
   await audio.init();
 
+  final ads = AdMobAdsService();
   runApp(FriendshipManiaApp(
     auth: FirebaseAuthService(),
     data: FirestoreUserDataService(),
     audio: audio,
+    ads: ads,
   ));
+  // After the first frame: consent (where required) runs over the welcome
+  // screen instead of delaying startup, and banners appear once it's done.
+  unawaited(ads.init());
 }
 
 class FriendshipManiaApp extends StatefulWidget {
@@ -52,11 +60,13 @@ class FriendshipManiaApp extends StatefulWidget {
     required this.auth,
     required this.data,
     required this.audio,
+    required this.ads,
   });
 
   final AuthService auth;
   final UserDataService data;
   final AudioService audio;
+  final AdsService ads;
 
   @override
   State<FriendshipManiaApp> createState() => _FriendshipManiaAppState();
@@ -71,6 +81,7 @@ class _FriendshipManiaAppState extends State<FriendshipManiaApp> {
       auth: widget.auth,
       data: widget.data,
       audio: widget.audio,
+      ads: widget.ads,
       session: _session,
       child: MaterialApp(
         title: 'friendshipmania',

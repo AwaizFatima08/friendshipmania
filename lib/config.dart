@@ -6,6 +6,14 @@ const String privacyUrl = '$siteBase/privacy.html';
 const String termsUrl = '$siteBase/terms.html';
 const String deleteAccountUrl = '$siteBase/delete-account.html';
 
+/// AdMob banner units for release builds (AdMob → Apps → friendshipmania →
+/// Ad units). Not secrets — they ship inside every APK. Leave empty and the
+/// release build simply shows no ads; debug builds always use Google's test
+/// unit. The AdMob *app* ID lives in android/app/build.gradle.kts.
+/// tool/check_release_ad_ids.sh refuses a release while these are unset.
+const String admobBannerResultUnitId = '';
+const String admobBannerHistoryUnitId = '';
+
 /// Public support address — the same one already shown on homilabs.org.
 const String supportEmail = 'homilabs.smc@gmail.com';
 

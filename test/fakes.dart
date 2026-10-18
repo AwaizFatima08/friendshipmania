@@ -7,6 +7,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:friendshipmania/main.dart';
+import 'package:friendshipmania/services/ads_service.dart';
 import 'package:friendshipmania/services/app_services.dart';
 import 'package:friendshipmania/services/audio_service.dart';
 import 'package:friendshipmania/services/auth_service.dart';
@@ -193,12 +194,19 @@ const AppUser kTestUser = AppUser(
 );
 
 /// The whole real app, wired to fakes.
-Widget fakeApp({Key? key, FakeAuthService? auth, FakeUserDataService? data, AudioService? audio}) {
+Widget fakeApp({
+  Key? key,
+  FakeAuthService? auth,
+  FakeUserDataService? data,
+  AudioService? audio,
+  AdsService? ads,
+}) {
   return FriendshipManiaApp(
     key: key,
     auth: auth ?? FakeAuthService(),
     data: data ?? FakeUserDataService(),
     audio: audio ?? NoopAudioService(),
+    ads: ads ?? NoopAdsService(),
   );
 }
 
@@ -209,11 +217,13 @@ Widget fakeScreen(
   FakeUserDataService? data,
   AudioService? audio,
   AppSession? session,
+  AdsService? ads,
 }) {
   return AppServices(
     auth: auth ?? FakeAuthService(),
     data: data ?? FakeUserDataService(),
     audio: audio ?? NoopAudioService(),
+    ads: ads ?? NoopAdsService(),
     session: session ?? AppSession(),
     child: MaterialApp(theme: buildAppTheme(), home: screen),
   );
@@ -246,4 +256,24 @@ void testPhone(String description, Future<void> Function(WidgetTester tester) bo
     addTearDown(tester.view.reset);
     await body(tester);
   });
+}
+
+/// An ads fake that renders a findable placeholder per placement and records
+/// what the app asked for.
+class RecordingAds extends NoopAdsService {
+  final List<AdPlacement> requested = [];
+  bool privacyRequired = false;
+  int privacyFormShown = 0;
+
+  @override
+  Future<bool> privacyOptionsRequired() async => privacyRequired;
+
+  @override
+  Future<void> showPrivacyOptions() async => privacyFormShown++;
+
+  @override
+  Widget banner(AdPlacement placement) {
+    requested.add(placement);
+    return SizedBox(key: Key('ad-${placement.name}'), height: 50);
+  }
 }

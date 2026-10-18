@@ -16,6 +16,12 @@ if (hasReleaseSigning) {
     keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
 
+// AdMob app ID for release builds (AdMob → Apps → friendshipmania → App settings).
+// Not a secret: it ships in every APK. Debug/profile builds use Google's sample
+// app ID so test ads never touch the real account.
+val admobReleaseAppId = ""
+val admobSampleAppId = "ca-app-pub-3940256099942544~3347511713"
+
 android {
     namespace = "com.homilabs.friendshipmania"
     compileSdk = flutter.compileSdkVersion
@@ -39,6 +45,7 @@ android {
         versionCode = flutter.versionCode
         versionName = flutter.versionName
         multiDexEnabled = true
+        manifestPlaceholders["admobAppId"] = admobSampleAppId
     }
 
     signingConfigs {
@@ -62,6 +69,8 @@ android {
             } else {
                 signingConfigs.getByName("debug")
             }
+            manifestPlaceholders["admobAppId"] =
+                admobReleaseAppId.ifEmpty { admobSampleAppId }
             isMinifyEnabled = true
             isShrinkResources = true
             proguardFiles(
@@ -74,6 +83,16 @@ android {
 
 flutter {
     source = "../.."
+}
+
+// A release without the real AdMob app ID would ship Google's sample ID.
+// Fail loudly instead (the Dart unit IDs are checked by tool/check_release_ad_ids.sh).
+tasks.matching { it.name == "preReleaseBuild" }.configureEach {
+    doFirst {
+        check(admobReleaseAppId.startsWith("ca-app-pub-") && !admobReleaseAppId.contains("3940256099942544")) {
+            "Set admobReleaseAppId in android/app/build.gradle.kts before building a release."
+        }
+    }
 }
 
 dependencies {

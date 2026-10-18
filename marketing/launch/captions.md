@@ -30,7 +30,7 @@ Is your bestie lying to you? 🕵️
 friendshipmania is OUT NOW on Google Play 🎉
 Type two names, answer 10 unhinged questions (raccoon kidnappings, goose attacks, zombie plans…) and get one brutally honest verdict on your friendship. Then send it to them and watch the drama unfold. 🍿
 
-✅ Free · ✅ No ads · ✅ Takes 2 minutes · Ages 13+
+✅ Free · ✅ Takes 2 minutes · Ages 13+
 
 👉 Scan the QR or tap here: https://play.google.com/store/apps/details?id=com.homilabs.friendshipmania&referrer=utm_source%3Dfacebook
 
@@ -45,7 +45,7 @@ Is your bestie lying to you? 🕵️ The polygraph never lies.
 
 friendshipmania just dropped 🎉 10 unhinged questions → 1 brutal verdict → send it to your bestie → chaos. 🍿
 
-Free on Google Play, no ads. Link in bio 🔗 (or scan the QR!)
+Free on Google Play. Link in bio 🔗 (or scan the QR!)
 
 Tag the bestie who needs to take this test 👇
 

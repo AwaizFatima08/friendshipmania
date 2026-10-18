@@ -20,7 +20,7 @@ The live legal pages are on the subdomain (source: `site/friendshipmania/`).
 | Package name | `com.homilabs.friendshipmania` |
 | Category | Entertainment |
 | Free / paid | Free |
-| Contains ads | **No** |
+| Contains ads | **Yes** — AdMob banners on the verdict + My verdicts screens (from 1.0.1) |
 | In-app purchases | **No** |
 | Target age | **13+** only (not "designed for children"; do NOT opt into Families) |
 | Content rating | Expect **Teen** (cheeky/roast humor, mild crude humor, user-generated names). Answer the IARC questionnaire honestly. |
@@ -49,7 +49,7 @@ WHY YOU'LL LIKE IT
 • Actually funny. Every question is written to get a real laugh out of a real friendship.
 • Different every time — a fresh mix of questions and shuffled answers.
 • Takes about two minutes.
-• Free. No ads. No in-app purchases.
+• Free, kept that way by a few small banner ads. No in-app purchases.
 • Sign in is optional: use email, Google, or skip it and stay a lone wolf.
 
 YOUR DATA
@@ -71,14 +71,27 @@ Sound effects: Powered by Stability AI.
 | Personal info → **User IDs** (Firebase UID) | Yes | App functionality, account management | Yes | No |
 | App activity → **Other user-generated content** (friend names typed, saved verdicts) | Yes | App functionality | Yes | No |
 
+**Added in 1.0.1 for AdMob** (collected by the Google Mobile Ads SDK; Google's own AdMob
+data-disclosure guidance lists these — re-check it before submitting):
+
+| Data type | Collected | Shared | Purpose | Optional? |
+|---|---|---|---|---|
+| Location → **Approximate location** (from IP address) | Yes | Yes | Advertising or marketing, Analytics, Fraud prevention | No |
+| App activity → **App interactions** (ad views/taps) | Yes | Yes | Advertising or marketing, Analytics | No |
+| App info and performance → **Crash logs**, **Diagnostics** | Yes | Yes | Analytics, Fraud prevention | No |
+| Device or other IDs → **Device or other IDs** (advertising ID) | Yes | Yes | Advertising or marketing, Analytics, Fraud prevention | No |
+
+So the top answer changes to **collects AND shares** (the four AdMob rows are shared with Google
+for advertising; the original four rows stay "collected, not shared").
+
 - **Encrypted in transit:** Yes (HTTPS).
 - **Users can request deletion:** Yes — in-app, plus the deletion URL above.
-- **Not collected:** location, contacts, photos/files, audio, device/advertising IDs, financial info, analytics, crash logs.
-- **If this changes** (analytics, crash reporting, ads): update this form AND the privacy page *before* that release.
+- **Not collected:** precise location, contacts, photos/files, audio, financial info, our own analytics.
+- **If this changes** (analytics, crash reporting, more ad formats): update this form AND the privacy page *before* that release.
 
 ## Other App content declarations
 
-- **Ads:** No.
+- **Ads:** Yes (from 1.0.1). The "Contains ads" label then shows on the listing.
 - **Government/financial/health/news app:** No.
 - **Account deletion:** has accounts → enter the deletion URL (above). The in-app path is *My account → Delete account & data*.
 - **Target audience:** 13–15, 16–17, 18+. Not under 13.

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../services/ads_service.dart';
 import '../services/app_services.dart';
 import '../services/user_data_service.dart';
 import '../widgets/gradient_page.dart';
@@ -22,13 +23,15 @@ class HistoryScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final data = AppServices.of(context).data;
+    final services = AppServices.of(context);
+    final data = services.data;
 
     return GradientPage(
       appBar: AppBar(
         title: const Text('My verdicts 📋'),
         actions: const [MuteButton()],
       ),
+      bottom: services.ads.banner(AdPlacement.history),
       body: StreamBuilder<List<SavedReport>>(
         stream: data.watchReports(uid),
         builder: (context, snapshot) {

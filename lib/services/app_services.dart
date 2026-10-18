@@ -1,5 +1,6 @@
 import 'package:flutter/widgets.dart';
 
+import 'ads_service.dart';
 import 'audio_service.dart';
 import 'auth_service.dart';
 import 'user_data_service.dart';
@@ -23,6 +24,7 @@ class AppServices extends InheritedWidget {
     required this.data,
     required this.audio,
     required this.session,
+    required this.ads,
     required super.child,
   });
 
@@ -30,6 +32,7 @@ class AppServices extends InheritedWidget {
   final UserDataService data;
   final AudioService audio;
   final AppSession session;
+  final AdsService ads;
 
   static AppServices of(BuildContext context) {
     final services =
@@ -42,5 +45,6 @@ class AppServices extends InheritedWidget {
   bool updateShouldNotify(AppServices oldWidget) =>
       auth != oldWidget.auth ||
       data != oldWidget.data ||
-      audio != oldWidget.audio;
+      audio != oldWidget.audio ||
+      ads != oldWidget.ads;
 }

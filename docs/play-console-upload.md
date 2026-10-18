@@ -43,7 +43,7 @@ Play re-signs the app with its own key, which Firebase doesn't know yet.
 | Item | Answer |
 |---|---|
 | Privacy policy | `https://friendshipmania.homilabs.org/privacy.html` |
-| Ads | No |
+| Ads | **Yes** (AdMob banners, from 1.0.1) |
 | App access | *All or some functionality is restricted* → instructions: "Sign-in is optional. Tap **Skip** to use the app as a guest, or **Sign in → Sign up** with any email to test saved verdicts and account deletion." |
 | Content rating | Fill the IARC questionnaire honestly (cheeky/roast humour, user-typed names, no violence/gambling) — expect **Teen** |
 | Target audience | 13–15, 16–17, 18+ (not under 13; not Families) |

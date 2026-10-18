@@ -23,7 +23,10 @@ class GradientPage extends StatelessWidget {
   final PreferredSizeWidget? appBar;
   final Widget body;
 
-  const GradientPage({super.key, this.appBar, required this.body});
+  /// Pinned under the body (used for the ad banner). Collapses when empty.
+  final Widget? bottom;
+
+  const GradientPage({super.key, this.appBar, required this.body, this.bottom});
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +41,10 @@ class GradientPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: appBar,
-        body: SafeArea(child: body),
+        body: SafeArea(bottom: bottom == null, child: body),
+        bottomNavigationBar: bottom == null
+            ? null
+            : SafeArea(top: false, child: Center(heightFactor: 1, child: bottom)),
       ),
     );
   }

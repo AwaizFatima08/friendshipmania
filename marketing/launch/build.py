@@ -166,7 +166,7 @@ def poster():
             qr_card(70, 1380, 1100, 300, 'poster', 250, [
                 (95, 'Scan to take the test', 58, INK),
                 (155, 'Free on Google Play', 44, PURPLE),
-                (205, 'No ads · About 2 minutes · Ages 13+', 30, '#5B4A7A'),
+                (205, 'Free · About 2 minutes · Ages 13+', 30, '#5B4A7A'),
                 (250, 'friendshipmania.homilabs.org', 30, '#5B4A7A'),
             ]),
             plain_text(w / 2, 1730, 'friendshipmania · made by HomiLabs', 28, anchor='middle', opacity=0.85)]
@@ -187,7 +187,7 @@ def feed(channel):
             phone(660, 470, 300, shot(3), 6, 'p1'),
             qr_card(50, 1090, 980, 220, channel, 180, [
                 (78, 'Scan to put your bestie on trial', 38, INK),
-                (128, 'Free on Google Play · No ads', 30, PURPLE),
+                (128, 'Free on Google Play · 2 minutes', 30, PURPLE),
                 (172, 'Search “friendshipmania” · Ages 13+', 26, '#5B4A7A'),
             ])]
     return w, h, ''.join(body)
@@ -209,7 +209,7 @@ def story(channel):
             qr_card(50, 1250, 900, 270, channel, 230, [
                 (95, 'Scan to play free', 40, INK),
                 (145, 'on Google Play', 32, PURPLE),
-                (195, 'No ads · Ages 13+', 26, '#5B4A7A'),
+                (195, 'Takes 2 minutes · Ages 13+', 26, '#5B4A7A'),
                 (235, 'Link in bio', 26, '#5B4A7A'),
             ]),
             image(780, 1560, 220, 120, a('flames'))]

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import '../models/question.dart';
+import '../services/ads_service.dart';
 import '../services/app_services.dart';
 import '../services/audio_service.dart';
 import '../services/report_service.dart';
@@ -174,6 +175,9 @@ class _ResultScreenState extends State<ResultScreen> {
         title: const Text('Your verdict 📋'),
         actions: const [MuteButton()],
       ),
+      // Pinned below the page — never inside the RepaintBoundary, so the
+      // downloaded/shared scorecard image never contains an ad.
+      bottom: AppServices.of(context).ads.banner(AdPlacement.result),
       // One scrolling page: the whole scorecard is always reachable, instead
       // of being squeezed into a small window above fixed buttons.
       body: ListView(
